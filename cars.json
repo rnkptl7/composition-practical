@@ -1,0 +1,60 @@
+[
+  {
+    "name": "Mahindra Thar",
+    "price": "₹12.78 - ₹15.35 Lakh",
+    "description": "The Mahindra Thar is a rugged SUV with an iconic design and excellent off-road capabilities. It comes with a choice of petrol and diesel engines, and offers advanced features like touchscreen infotainment and cruise control.",
+    "image": "https://www.pharaohautomotive.com/wp-content/uploads/2022/06/Mahindra-Thar.png"
+  },
+  {
+    "name": "Mahindra Tuv 300",
+    "price": "₹9.00 - ₹15.70 Lakh",
+    "description": "The TUV 300 is a 7 seater 3 cylinder car and has length of 3995mm, width of 1795mm and a wheelbase of 2680mm.",
+    "image": "https://www.seekpng.com/png/full/250-2507030_mahindra-tuv300-mahindra-tuv-300-black.png"
+  },
+  {
+    "name": "Land Rover Defender",
+    "description": "The Land Rover Defender is a series of British off-road cars and pickup trucks. They consistently have four-wheel drive, and were developed in the 1980s",
+    "image": "https://www.pngplay.com/wp-content/uploads/13/Land-Rover-Defender-Transparent-Images.png"
+  },
+  {
+    "name": "Mahindra XUV300",
+    "price": "₹7.95 - ₹13.33 Lakh",
+    "description": "The Mahindra XUV300 is a stylish and spacious SUV with a range of advanced features. It comes with a choice of petrol and diesel engines, and offers excellent performance and fuel efficiency.",
+    "image": "https://prog-ace-cdn.azureedge.net/-/media/project/mahindra/dotcom/mahindra/dark-theme-mahindra-images/hello-xuv/xuv-300/xuv300_-dark-theme-_-hello-xuv_1920x745px_-desktop.png?rev=d70dcda99ef04ee3a2cc77ed3c9a0966"
+  },
+  {
+    "name": "Range Rover Sports",
+    "price": "₹5.80 - ₹9.56 Lakh",
+    "description": "Land Rover is crafted to reflect bold design with genuine capability & composure at heart. A reflection of modernity. Captivating in its simplicity.",
+    "image": "https://i.pinimg.com/originals/52/ac/01/52ac0169c1ead77f6e33180d129900af.png"
+  },
+  {
+    "name": "Jeep Wrangler",
+    "price": "₹59.05 - ₹63.05 Lakh",
+    "description": "Jeep Wrangler is a 5 seater SUV available in a price range of Rs. 59.05 - 63.05 Lakh*. It is available in 2 variants, a 1998 cc, BS6 and a single Automatic.",
+    "image": "https://s3.us-east-2.amazonaws.com/dealer-inspire-vps-vehicle-images/stock-images/thumbnails/large/chrome/c141ee99f0fbe99a91f673cdce6fcd23.png"
+  },
+  {
+    "name": "Mercedes Benz G-Class G550",
+    "description": "Mercedes-Benz G-Class is a 5 seater SUV available in a price range of Rs. 1.72 - 2.55 Crore. It is available in 2 variants, 2925 to 3982 cc engine options.",
+    "image": "https://d2ivfcfbdvj3sm.cloudfront.net/7fc965ab77efe6e0fa62e4ca1ea7673bb25e4851091e3d8e88cb10/stills_0640_png/MY2021/14902/14902_st0640_116.png"
+  },
+  {
+    "name": "Tata Safari",
+    "price": "₹15.04 - ₹25.19 Lakh",
+    "description": "With the All-New Tata Safari, no matter where it's taken, the refined ride & handling and a thrilling drive powers the journey. With the 170 PS Kryotec Engine",
+    "image": "https://malikcars.com/wp-content/uploads/2021/08/safari-tropical-mist-adventure-blk-desktop_480-x-275.png"
+  },
+  {
+    "name": "Toyota Fortuner",
+    "price": "₹30.34 - ₹38.32 Lakh",
+    "description": "The Toyota Fortuner is a powerful SUV with a bold and rugged design. It comes with a choice of petrol and diesel engines,and offers advanced features like a touchscreen infotainment system, automatic climate control, and a panoramic sunroof.",
+    "image": "https://www.freepnglogos.com/uploads/fortuner-png/fortuner-gxl-automatic-melville-toyota-2.png"
+  },
+  {
+    "name": "Mahindra Scorpio Classic",
+    "price": "₹13.04 - ₹16.41 Lakh",
+    "description": "Introducing new Mahindra Scorpio Classic with a new imposing look at the front, an all-new powerful mHAWK engine, premium interiors.",
+    "image": "https://prog-ace-cdn.azureedge.net/-/media/project/mahindra/dotcom/mahindra/dark-theme-mahindra-images/hello-w153/w153-840x560.png?rev=efa10bc446274ec9823e253898097500"
+  }
+]
