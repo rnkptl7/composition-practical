@@ -19,21 +19,20 @@
   </div>
 </template>
 
-<script>
-import { mapActions, mapState } from "pinia";
+<script setup>
+import { storeToRefs } from "pinia";
 import { useUserStore } from "../stores/userStore";
-export default {
-  methods: {
-    ...mapActions(useUserStore, ["logout"]),
-  },
-  computed: {
-    ...mapState(useUserStore, ["isLoggedIn"]),
-    logoutBtn() {
-      this.logout();
-      this.$router.push({ name: "Login" });
-    },
-  },
-};
+import { useRouter } from "vue-router";
+
+const userStore = useUserStore();
+const router = useRouter();
+
+const { isLoggedIn } = storeToRefs(userStore);
+
+function logoutBtn() {
+  userStore.logout();
+  router.push({ name: "Login" });
+}
 </script>
 
 <style lang="scss" scoped>

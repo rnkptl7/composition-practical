@@ -1,22 +1,17 @@
 <template>
   <Navbar></Navbar>
-  <router-view v-slot="{ Component }">
-    <transition name="route" mode="out-in" appear>
-      <component :is="Component"></component>
-    </transition>
-  </router-view>
+  <Suspense>
+    <router-view v-slot="{ Component }">
+      <transition name="route" mode="out-in" appear>
+        <component :is="Component"></component>
+      </transition>
+    </router-view>
+  </Suspense>
 </template>
 
-<script>
+<script setup>
 import "sweetalert2/src/sweetalert2.scss";
-
 import Navbar from "./components/Navbar.vue";
-
-export default {
-  components: {
-    Navbar,
-  },
-};
 </script>
 
 <style lang="scss" scoped>

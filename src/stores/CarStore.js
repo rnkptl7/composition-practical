@@ -18,7 +18,10 @@ export const useCarStore = defineStore("carStore", {
   getters: {
     getCarById: (state) => (id) => {
       state.car = [];
+      console.log(id);
+      console.log(state.carsData);
       const car = state.carsData.find((car) => car.id == id);
+      console.log(car);
       if (!car) {
         state.isError = true;
         state.error = "Car data is not available!";
@@ -50,8 +53,8 @@ export const useCarStore = defineStore("carStore", {
       this.showNav = false;
     },
     async getData() {
-      this.loading = true;
       try {
+        this.loading = true;
         const response = await axios.get(this.url);
 
         this.carsData = response.data.data;
@@ -69,17 +72,9 @@ export const useCarStore = defineStore("carStore", {
     deleteCarData(id) {
       return axios.delete(`${this.url}/${id}`);
     },
+
     addCarData(formData) {
       return axios.post(this.url, formData);
     },
-    // loginUser(formData) {
-    //   return axios.post("https://testapi.io/api/dartya//login", formData);
-    // },
-    // addUser(formData) {
-    //   return axios.post(
-    //     "https://testapi.io/api/dartya/resource/users",
-    //     formData
-    //   );
-    // },
   },
 });

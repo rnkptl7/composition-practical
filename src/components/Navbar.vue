@@ -38,34 +38,28 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import NavigationMobile from "@/components/NavigationMobile.vue";
 import { useCarStore } from "../stores/CarStore";
 import { useUserStore } from "../stores/userStore";
-import { mapActions, mapState, mapWritableState } from "pinia";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 
-export default {
-  components: {
-    NavigationMobile,
-  },
-  computed: {
-    ...mapWritableState(useCarStore, ["mobileView", "showNav"]),
-    ...mapState(useUserStore, ["isLoggedIn"]),
-    logoutBtn() {
-      this.logout();
-      this.$router.push({ name: "Login" });
-    },
-  },
-  methods: {
-    ...mapActions(useCarStore, ["handleView", "closeMobileMenu"]),
-    ...mapActions(useUserStore, ["logout"]),
-  },
-  created() {
-    this.handleView();
-    window.addEventListener("resize", this.handleView);
-    window.addEventListener("scroll", this.closeMobileMenu);
-  },
-};
+const userStore = useUserStore();
+const carStore = useCarStore();
+const router = useRouter();
+
+const { mobileView, showNav } = storeToRefs(carStore);
+const { isLoggedIn } = storeToRefs(userStore);
+
+function logoutBtn() {
+  userStore.logout();
+  router.push({ name: "Login" });
+}
+
+carStore.handleView();
+window.addEventListener("resize", carStore.handleView);
+window.addEventListener("scroll", carStore.closeMobileMenu);
 </script>
 
 <style scoped lang="scss">

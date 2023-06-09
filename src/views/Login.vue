@@ -33,69 +33,65 @@
   </div>
 </template>
 
-<script>
-import { ErrorMessage } from "vee-validate";
+<script setup>
 import { useUserStore } from "../stores/userStore";
 import { useCarStore } from "../stores/CarStore";
-import { mapActions, mapWritableState } from "pinia";
 
-export default {
-  components: {
-    ErrorMessage,
-  },
-  data() {
-    return {
-      schema: {
-        email: "required|email",
-        password:
-          "required|passwordmin:8|passwordmax:12|regex:^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[_#?!@$%^&*-]).*$",
-      },
-      form: {
-        email: "",
-        password: "",
-      },
-    };
-  },
-  computed: {
-    ...mapWritableState(useCarStore, ["loading"]),
-  },
-  methods: {
-    ...mapActions(useUserStore, ["loginUser", "getUsers"]),
-    async submitForm() {
-      try {
-        this.loading = true;
-        // const response = await this.loginUser(this.form);
+import { reactive } from "vue";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import { ErrorMessage } from "vee-validate";
 
-        const response = await this.getUsers();
-        const users = response.data.data;
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
-        const isAvailable = users.find(
-          (user) =>
-            user.email === this.form.email &&
-            user.password === this.form.password
-        );
+const $toast = useToast();
+const userStore = useUserStore();
+const carStore = useCarStore();
+const router = useRouter();
 
-        // console.log(isAvailable);
-        if (isAvailable) {
-          this.$toast.success("Login successfully", {
-            position: "top-right",
-            duration: 3000,
-          });
-          let token = Math.random().toString(36).substr(2);
-          sessionStorage.setItem("isLoggedIn", true);
-          sessionStorage.setItem("token", token);
-          this.loading = false;
-          this.$router.replace({ name: "Home" });
-        } else {
-          this.loading = false;
-          throw new Error("Incorrect email or password");
-        }
-      } catch (error) {
-        this.loading = false;
-        alert("Incorrect email or password!");
-      }
-    },
-  },
+const { getUsers } = userStore;
+const { loading } = storeToRefs(carStore);
+
+const schema = {
+  email: "required|email",
+  password:
+    "required|passwordmin:8|passwordmax:12|regex:^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[_#?!@$%^&*-]).*$",
+};
+
+const form = reactive({
+  email: "",
+  password: "",
+});
+
+const submitForm = async () => {
+  try {
+    loading.value = true;
+    const response = await getUsers();
+    const users = response.data.data;
+
+    const isAvailable = users.find(
+      (user) => user.email === form.email && user.password === form.password
+    );
+
+    if (isAvailable) {
+      $toast.success("Login successfully", {
+        position: "top-right",
+        duration: 3000,
+      });
+      let token = Math.random().toString(36).substr(2);
+      sessionStorage.setItem("isLoggedIn", true);
+      sessionStorage.setItem("token", token);
+      loading.value = false;
+      router.replace({ name: "Home" });
+    } else {
+      loading.value = false;
+      throw new Error("Incorrect email or password");
+    }
+  } catch (error) {
+    loading.value = false;
+    alert("Incorrect email or password!");
+  }
 };
 </script>
 

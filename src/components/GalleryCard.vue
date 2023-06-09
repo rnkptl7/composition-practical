@@ -146,7 +146,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import Swal from "sweetalert2";
 import { ErrorMessage } from "vee-validate";
 import "sweetalert2/src/sweetalert2.scss";
@@ -156,207 +156,186 @@ import CarForm from "./CarForm.vue";
 import Loading from "./Loading.vue";
 import Error from "./Error.vue";
 import { useCarStore } from "../stores/CarStore";
-import { mapActions, mapState, mapWritableState } from "pinia";
+import { storeToRefs } from "pinia";
+import { reactive } from "vue";
 
-export default {
-  components: {
-    CarForm,
-    Loading,
-    Error,
-  },
-  data() {
-    return {
-      form: {
-        name: "",
-        details: "",
-        image: "",
-        price: "",
+const carStore = useCarStore();
+
+const emits = defineEmits(["edit-item", "close-modal"]);
+
+const { carsData, loading, isError, error, openModal, editModal } =
+  storeToRefs(carStore);
+
+const form = reactive({
+  name: "",
+  details: "",
+  image: "",
+  price: "",
+});
+
+let editCarId = reactive({});
+
+carStore.getData();
+
+const editItem = (value) => {
+  carStore.editButton();
+  window.scrollTo(0, 0);
+
+  editCarId = value.id;
+
+  form.name = value.name;
+  form.details = value.details;
+  form.price = value.price;
+  form.image = value.image;
+};
+
+const closeModalForm = () => {
+  carStore.closeModal();
+
+  form.name = "";
+  form.details = "";
+  form.image = "";
+  form.price = "";
+  editCarId = "";
+};
+
+const deleteItem = async (id) => {
+  try {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger",
       },
-      editCarId: "",
-    };
-  },
-  emits: ["edit-item", "close-modal"],
-  mounted() {
-    this.getData();
-  },
-  computed: {
-    ...mapWritableState(useCarStore, [
-      "carsData",
-      "loading",
-      "isError",
-      "error",
-      "openModal",
-      "editModal",
-    ]),
-    ...mapState(useCarStore, ["closeModal", "editButton"]),
-  },
-  methods: {
-    ...mapActions(useCarStore, [
-      "getData",
-      "updateCarData",
-      "deleteCarData",
-      "addCarData",
-    ]),
-    getPrice(carPrice, carName) {
-      Swal.fire({
-        title: "Price of " + carName,
-        text: `₹ ${carPrice}`,
-        showClass: {
-          popup: "animate__animated animate__fadeInDown",
-        },
-        hideClass: {
-          popup: "animate__animated animate__fadeOutUp",
-        },
-        confirmButtonColor: "#082032",
+      buttonsStyling: false,
+    });
+
+    swalWithBootstrapButtons
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          carStore
+            .deleteCarData(id)
+            .then((res) => {
+              console.log(res);
+              swalWithBootstrapButtons.fire(
+                "Deleted!",
+                "Your data has been deleted.",
+                "success"
+              );
+
+              carStore.getData();
+            })
+            .catch((error) => {
+              loading.value = false;
+              isError.value = true;
+              error.value =
+                error.value.response.status +
+                " " +
+                error.value.response.statusText;
+            });
+        }
       });
-    },
-    async deleteItem(id) {
-      try {
-        const swalWithBootstrapButtons = Swal.mixin({
-          customClass: {
-            confirmButton: "btn btn-success",
-            cancelButton: "btn btn-danger",
+  } catch (error) {
+    loading.value = false;
+    isError.value = true;
+    error.value =
+      error.value.response.status + " " + error.value.response.statusText;
+  }
+};
+
+const updateData = async () => {
+  if (
+    form.name === "" ||
+    form.details === "" ||
+    form.image === "" ||
+    form.price === ""
+  ) {
+    alert("Please fill the form");
+  } else {
+    try {
+      loading.value = true;
+      const response = await carStore.updateCarData(editCarId, form);
+      if (response) {
+        carStore.getData();
+        closeModalForm();
+        loading.value = false;
+      }
+    } catch (error) {
+      loading.value = false;
+      isError.value = true;
+      error.value =
+        error.value.response.status + " " + error.value.response.statusText;
+    }
+  }
+};
+
+const submitForm = async () => {
+  if (
+    form.name === "" ||
+    form.details === "" ||
+    form.image === "" ||
+    form.price === ""
+  ) {
+    alert("Please fill the form");
+  } else {
+    try {
+      loading.value = true;
+      const response = await carStore.addCarData(form);
+
+      loading.value = false;
+
+      if (response.status === 201) {
+        emits("close-modal");
+        Swal.fire({
+          title: "Created Data",
+          html: `<div class="alertData">
+              <p><b>Car Name</b>: ${form.name}</p><p class="alertDetail"><b>Details</b>: ${form.details}</p>
+          <p><b>Price</b>: ₹${form.price}</p>
+          <p><b>Image Url</b>: ${form.image}</p>
+          </div>`,
+          showClass: {
+            popup: "animate__animated animate__fadeInDown",
           },
-          buttonsStyling: false,
+          hideClass: {
+            popup: "animate__animated animate__fadeOutUp",
+          },
+          confirmButtonColor: "#082032",
         });
 
-        swalWithBootstrapButtons
-          .fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "No, cancel!",
-            reverseButtons: true,
-          })
-          .then((result) => {
-            if (result.isConfirmed) {
-              this.deleteCarData(id)
-                .then((res) => {
-                  console.log(res);
-                  swalWithBootstrapButtons.fire(
-                    "Deleted!",
-                    "Your data has been deleted.",
-                    "success"
-                  );
-
-                  this.getData();
-                })
-                .catch((error) => {
-                  this.loading = false;
-                  this.isError = true;
-                  this.error =
-                    error.response.status + " " + error.response.statusText;
-                });
-            }
-          });
-      } catch (error) {
-        this.loading = false;
-        this.isError = true;
-        this.error = error.response.status + " " + error.response.statusText;
+        closeModalForm();
+        carStore.getData();
       }
-    },
-    editItem(value) {
-      this.editButton();
-      window.scrollTo(0, 0);
-
-      this.editCarId = value.id;
-
-      this.form.name = value.name;
-      this.form.details = value.details;
-      this.form.price = value.price;
-      this.form.image = value.image;
-    },
-    async updateData() {
-      if (
-        this.form.name === "" ||
-        this.form.details === "" ||
-        this.form.image === "" ||
-        this.form.price === ""
-      ) {
-        alert("Please fill the form");
-      } else {
-        try {
-          this.loading = true;
-          const response = await this.updateCarData(this.editCarId, this.form);
-          if (response) {
-            this.getData();
-            this.closeModalForm();
-            this.loading = false;
-          }
-        } catch (error) {
-          this.loading = false;
-          this.isError = true;
-          this.error = error.response.status + " " + error.response.statusText;
-        }
-      }
-    },
-    closeModalForm() {
-      this.closeModal();
-
-      this.form.name = "";
-      this.form.details = "";
-      this.form.image = "";
-      this.form.price = "";
-      this.editCarId = "";
-    },
-    async submitForm() {
-      if (
-        this.form.name === "" ||
-        this.form.details === "" ||
-        this.form.image === "" ||
-        this.form.price === ""
-      ) {
-        alert("Please fill the form");
-      } else {
-        try {
-          const response = await this.addCarData(this.form);
-
-          if (response.status === 201) {
-            this.$emit("close-modal");
-            Swal.fire({
-              title: "Created Data",
-              html: `<div class="alertData">
-              <p><b>Car Name</b>: ${this.form.name}</p><p class="alertDetail"><b>Details</b>: ${this.form.details}</p>
-          <p><b>Price</b>: ₹${this.form.price}</p>
-          <p><b>Image Url</b>: ${this.form.image}</p>
-          </div>`,
-              showClass: {
-                popup: "animate__animated animate__fadeInDown",
-              },
-              hideClass: {
-                popup: "animate__animated animate__fadeOutUp",
-              },
-              confirmButtonColor: "#082032",
-            });
-
-            this.closeModalForm();
-            this.getData();
-          }
-        } catch (error) {
-          this.loading = false;
-          this.isError = true;
-          this.error = error.response.status + " " + error.response.statusText;
-        }
-      }
-    },
-    beforeEnter(el) {
-      el.style.opacity = 0;
-      el.style.transform = "translateY(100px)";
-    },
-
-    enter(el, done) {
-      gsap.to(el, {
-        opacity: 1,
-        y: 0,
-        duration: 0.1,
-        onComplete: done,
-        delay: el.dataset.index * 0.1,
-      });
-    },
-  },
+    } catch (error) {
+      loading.value = false;
+      isError.value = true;
+      error.value =
+        error.value.response.status + " " + error.value.response.statusText;
+    }
+  }
 };
+
+function beforeEnter(el) {
+  el.style.opacity = 0;
+  el.style.transform = "translateY(100px)";
+}
+
+function enter(el, done) {
+  gsap.to(el, {
+    opacity: 1,
+    y: 0,
+    duration: 0.1,
+    onComplete: done,
+    delay: el.dataset.index * 0.1,
+  });
+}
 </script>
 
 <style scoped>

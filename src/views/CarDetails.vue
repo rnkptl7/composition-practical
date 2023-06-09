@@ -6,7 +6,7 @@
     </div>
     <div v-else class="navigationBar">
       <div class="backBtn" @click="$router.push({ name: 'Home' })">
-        <img src="/images/back.png" alt="" />
+        <img src="/images/back.png" alt="Back Image" />
         <p>Back</p>
       </div>
     </div>
@@ -52,55 +52,43 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useCarStore } from "../stores/CarStore";
 
 import Loading from "../components/Loading.vue";
 import Error from "../components/Error.vue";
-import { mapActions, mapState, mapWritableState } from "pinia";
+import { storeToRefs } from "pinia";
+import { useRoute } from "vue-router";
+import { watch } from "vue";
 
-export default {
-  components: {
-    Loading,
-    Error,
-  },
-  computed: {
-    ...mapState(useCarStore, ["getCarById", "moreCars"]),
-    ...mapWritableState(useCarStore, [
-      "loading",
-      "isError",
-      "error",
-      "carsData",
-      "car",
-      "moreCarsData",
-    ]),
-  },
-  methods: {
-    ...mapActions(useCarStore, ["getCarData", "getData"]),
-    async initData() {
-      try {
-        this.loading = true;
-        this.isError = false;
+const carStore = useCarStore();
+const route = useRoute();
 
-        this.getCarById(this.$route.params.id);
+const { loading, isError, error, car, moreCarsData } = storeToRefs(carStore);
 
-        this.moreCars(this.$route.params.id);
+function initData() {
+  try {
+    loading.value = true;
+    isError.value = false;
 
-        this.loading = false;
-      } catch (error) {
-        this.loading = false;
-        this.isError = true;
-        this.error = error.response.status + " " + error.response.statusText;
-      }
-    },
-  },
-  async created() {
-    await this.getData();
-    await this.initData();
+    carStore.getCarById(route.params.id);
 
-    this.$watch(() => this.$route.params.id, this.initData);
-  },
-};
+    carStore.moreCars(route.params.id);
+
+    loading.value = false;
+  } catch (error) {
+    console.log(error);
+    loading.value = false;
+    isError.value = true;
+    error.value = error.response.status + " " + error.response.statusText;
+  }
+}
+
+await carStore.getData();
+
+initData();
+
+watch(() => route.params.id, initData);
 </script>
 
 <style lang="scss">

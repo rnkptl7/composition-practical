@@ -15,25 +15,12 @@
   </div>
 </template>
 
-<script>
-import { ErrorMessage } from "vee-validate";
-
-export default {
-  emits: ["alert-form"],
-  components: {
-    ErrorMessage,
-  },
-  data() {
-    return {
-      schema: {
-        name: "required|min:3|max:100",
-        details: "required|min:30|max:120",
-        url: "required|url",
-        price: "required|min_value:50000",
-      },
-    };
-  },
-  methods: {},
+<script setup>
+const schema = {
+  name: "required|min:3|max:100",
+  details: "required|min:30|max:120",
+  url: "required|url",
+  price: "required|min_value:50000",
 };
 </script>
 
