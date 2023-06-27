@@ -5,14 +5,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ScalingSquaresSpinner } from "epic-spinners";
-
-export default {
-  components: {
-    ScalingSquaresSpinner,
-  },
-};
 </script>
 
 <style lang="scss" scoped></style>

@@ -5,14 +5,13 @@
   </div>
 </template>
 
-<script>
-import { mapState } from "pinia";
+<script setup>
+import { storeToRefs } from "pinia";
 import { useCarStore } from "../stores/CarStore";
-export default {
-  computed: {
-    ...mapState(useCarStore, ["error"]),
-  },
-};
+
+const carStore = useCarStore();
+
+const { error } = storeToRefs(carStore);
 </script>
 
 <style lang="scss"></style>

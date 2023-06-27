@@ -101,73 +101,74 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ErrorMessage } from "vee-validate";
-import { mapActions, mapWritableState } from "pinia";
+import { storeToRefs } from "pinia";
 import { useUserStore } from "../stores/userStore";
 import { useCarStore } from "../stores/CarStore";
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
-export default {
-  components: {
-    ErrorMessage,
-  },
-  data() {
-    return {
-      schema: {
-        name: "required|alpha_spaces",
-        email: "required|email",
-        password:
-          "required|passwordmin:8|passwordmax:12|regex:^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).*$",
-        ConfirmPassword: "required|confirmed:@password",
-        role: "required",
-        gender: "required",
-        dob: "required",
-        age: "required",
-      },
-      form: {
-        name: "",
-        email: "",
-        role: "",
-        password: "",
-        dob: "",
-        age: null,
-        gender: "",
-      },
-    };
-  },
-  computed: {
-    ...mapWritableState(useCarStore, ["loading"]),
-  },
-  methods: {
-    ...mapActions(useUserStore, ["addUser"]),
-    addAge(e) {
-      let date = new Date(e.target.value);
-      let month_diff = Date.now() - date.getTime();
-      let age_dt = new Date(month_diff);
-      let year = age_dt.getUTCFullYear();
-      let age = Math.abs(year - 1970);
+const $toast = useToast();
+const userStore = useUserStore();
+const carStore = useCarStore();
+const router = useRouter();
 
-      this.form.age = age;
-    },
-    async registerData() {
-      try {
-        this.loading = true;
-        let response = await this.addUser(this.form);
+const { loading } = storeToRefs(carStore);
+const { addUser } = userStore;
 
-        if (response.status === 201) {
-          this.$toast.success("Your Registration completed successfully", {
-            position: "top-right",
-            duration: 3000,
-          });
-          this.loading = false;
-          this.$router.push({ name: "Login" });
-        }
-      } catch (error) {
-        this.loading = false;
-        alert("User Not Register Successfully!");
-      }
-    },
-  },
+const schema = {
+  name: "required|alpha_spaces",
+  email: "required|email",
+  password:
+    "required|passwordmin:8|passwordmax:12|regex:^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).*$",
+  ConfirmPassword: "required|confirmed:@password",
+  role: "required",
+  gender: "required",
+  dob: "required",
+  age: "required",
+};
+
+const form = reactive({
+  name: "",
+  email: "",
+  role: "",
+  password: "",
+  dob: "",
+  age: null,
+  gender: "",
+});
+
+const addAge = (e) => {
+  let date = new Date(e.target.value);
+  let month_diff = Date.now() - date.getTime();
+  let age_dt = new Date(month_diff);
+  let year = age_dt.getUTCFullYear();
+  let age = Math.abs(year - 1970);
+
+  form.age = age;
+};
+
+const registerData = async () => {
+  try {
+    loading.value = true;
+    let response = await addUser(form);
+
+    if (response.status === 201) {
+      console.log(response);
+      $toast.success("Your Registration completed successfully", {
+        position: "top-right",
+        duration: 3000,
+      });
+      loading.value = false;
+      router.push({ name: "Login" });
+    }
+  } catch (error) {
+    loading.value = false;
+    alert("User Not Register Successfully!");
+  }
 };
 </script>
 

@@ -7,20 +7,15 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import GalleryCard from "@/components/GalleryCard.vue";
 
 import { useCarStore } from "../stores/CarStore";
-import { mapState } from "pinia";
+import { storeToRefs } from "pinia";
 
-export default {
-  components: {
-    GalleryCard,
-  },
-  computed: {
-    ...mapState(useCarStore, ["isOpenModal"]),
-  },
-};
+const carStore = useCarStore();
+
+const { isOpenModal } = storeToRefs(carStore);
 </script>
 
 <style lang="scss" scoped></style>

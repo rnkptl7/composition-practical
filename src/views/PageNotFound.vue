@@ -1,6 +1,6 @@
 <template>
   <div class="notFound">
-    <img src="/images/not.png" alt="" srcset="" />
+    <img src="/images/not.png" alt="Page Not Found" />
     <h1>Page Not Found!</h1>
     <router-link :to="{ name: 'Home' }">
       <button class="btn">Go To Home</button>
