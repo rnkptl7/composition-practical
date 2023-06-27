@@ -3,16 +3,23 @@
     <ul>
       <div v-if="isLoggedIn">
         <li>
-          <router-link to="/">Home</router-link>
+          <router-link to="/">{{ $t("navbar.home") }}</router-link>
         </li>
-        <button class="btn" @click="logoutBtn">Logout</button>
+        <li>
+          <router-link v-if="isAdmin" :to="{ name: 'Users' }">{{
+            $t("users.users")
+          }}</router-link>
+        </li>
+        <button class="btn" @click="logoutBtn">
+          {{ $t("navbar.logout") }}
+        </button>
       </div>
       <div v-else>
         <li>
-          <router-link to="/login">Login</router-link>
+          <router-link to="/login">{{ $t("navbar.login") }}</router-link>
         </li>
         <li>
-          <router-link to="/register">Register</router-link>
+          <router-link to="/register">{{ $t("navbar.register") }}</router-link>
         </li>
       </div>
     </ul>
@@ -22,16 +29,28 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { useUserStore } from "../stores/userStore";
+import { useCarStore } from "../stores/CarStore";
 import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
+const carStore = useCarStore();
 const router = useRouter();
 
-const { isLoggedIn } = storeToRefs(userStore);
+const { isLoggedIn, isAdmin } = storeToRefs(userStore);
+const { showNav } = storeToRefs(carStore);
 
 function logoutBtn() {
   userStore.logout();
   router.push({ name: "Login" });
+}
+
+if (showNav.value === true) {
+  document.onclick = function (e) {
+    console.log(e.target.classList[0] === "navigation-menu");
+    if (e.target.classList[0] !== "navigation-menu") {
+      showNav.value = false;
+    }
+  };
 }
 </script>
 

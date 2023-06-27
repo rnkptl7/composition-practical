@@ -4,6 +4,7 @@ import { defineStore } from "pinia";
 export const useUserStore = defineStore("userStore", {
   state: () => ({
     isLoggedIn: sessionStorage.getItem("isLoggedIn"),
+    isAdmin: sessionStorage.getItem("isAdmin"),
     userApi: import.meta.env.VITE_PROD_USER_API,
   }),
   actions: {
@@ -31,8 +32,10 @@ export const useUserStore = defineStore("userStore", {
     },
     logout() {
       sessionStorage.removeItem("isLoggedIn");
+      sessionStorage.removeItem("isAdmin");
       sessionStorage.removeItem("token");
       this.isLoggedIn = false;
+      this.isAdmin = false;
     },
   },
 });

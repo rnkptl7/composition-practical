@@ -2,7 +2,7 @@
   <div class="container">
     <vee-form class="form" :validation-schema="schema" @submit="registerData">
       <div class="heading">
-        <h1 class="heading">Register Here</h1>
+        <h1 class="heading">{{ $t("register.registerhere") }}</h1>
       </div>
       <div class="fields">
         <div class="inputDiv">
@@ -91,11 +91,14 @@
             placeholder="Enter Age"
           ></vee-field>
           <ErrorMessage name="age" class="error" />
+          <em>(All fields are required unless specified optional)</em>
         </div>
       </div>
       <div class="buttons block">
-        <button type="submit" class="btn">Register</button>
-        <button type="reset" class="btn">Cancel</button>
+        <button type="submit" class="btn">
+          {{ $t("navbar.register") }}
+        </button>
+        <button type="reset" class="btn">{{ $t("register.cancel") }}</button>
       </div>
     </vee-form>
   </div>
@@ -175,5 +178,11 @@ const registerData = async () => {
 <style lang="scss" scoped>
 form {
   margin: 4rem;
+}
+
+@media (max-width: 629px) {
+  form {
+    margin: 2rem;
+  }
 }
 </style>

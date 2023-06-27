@@ -29,6 +29,12 @@ const routes = [
     component: () => import("@/views/CarDetails.vue"),
   },
   {
+    name: "Users",
+    path: "/users",
+    meta: { requiredAuth: true, proctectedAdmin: true },
+    component: () => import("@/views/Users.vue"),
+  },
+  {
     name: "NotFound",
     path: "/:pathMatch(.*)*",
     component: () => import("@/views/PageNotFound.vue"),
@@ -55,6 +61,12 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.requiredAuth && !userStore.isAuthenticated()) {
     next("/login");
+  } else if (
+    to.meta.proctectedAdmin &&
+    userStore.isAuthenticated() &&
+    !userStore.isAdmin
+  ) {
+    next("/");
   } else if (to.meta.guest && userStore.isAuthenticated()) {
     next("/");
   } else {

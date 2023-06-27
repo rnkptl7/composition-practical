@@ -1,0 +1,22 @@
+{
+    "home":{
+        "addBtn": "Add Car"
+    },
+    "navbar":{
+        "home": "Home",
+        "logout": "Logout",
+        "login": "Login",
+        "register": "Register"
+    },
+    "details":{
+        "buynow": "Buy Now",
+        "back": "Back"
+    },
+    "register":{
+        "registerhere": "Register Here",
+        "cancel": "Cancel"
+    },
+    "users":{
+        "users": "Users"
+    }
+}
