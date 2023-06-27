@@ -6,11 +6,12 @@
       </div>
       <div class="fields">
         <slot name="fields"></slot>
+        <em>(All fields are required.)</em>
       </div>
       <div class="buttons block">
         <slot name="buttons"></slot>
       </div>
-      <slot></slot>
+      <slot> </slot>
     </vee-form>
   </div>
 </template>
@@ -37,10 +38,10 @@ const schema = {
   form {
     color: #fff;
     position: absolute;
-    padding: 20px;
+    padding: 30px;
     background: #334756;
     border-radius: 10px;
-    width: 450px;
+    width: 500px;
     top: 26rem;
     left: 50%;
     -ms-transform: translate(-50%, -50%);

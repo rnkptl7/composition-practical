@@ -2,7 +2,7 @@
   <div class="container">
     <vee-form class="form" :validation-schema="schema" @submit="submitForm">
       <div class="heading">
-        <h1 class="heading">Login</h1>
+        <h1 class="heading">{{ $t("navbar.login") }}</h1>
       </div>
       <div class="fields">
         <div class="inputDiv">
@@ -24,10 +24,11 @@
             name="password"
           />
           <ErrorMessage name="password" class="error" />
+          <em>(All fields are required unless specified optional)</em>
         </div>
       </div>
       <div class="buttons block">
-        <button type="submit" class="btn">Login</button>
+        <button type="submit" class="btn">{{ $t("navbar.login") }}</button>
       </div>
     </vee-form>
   </div>
@@ -52,6 +53,7 @@ const router = useRouter();
 
 const { getUsers } = userStore;
 const { loading } = storeToRefs(carStore);
+const { isAdmin } = storeToRefs(userStore);
 
 const schema = {
   email: "required|email",
@@ -79,6 +81,11 @@ const submitForm = async () => {
         position: "top-right",
         duration: 3000,
       });
+      console.log(isAvailable);
+      if (isAvailable.role === "admin") {
+        sessionStorage.setItem("isAdmin", true);
+        isAdmin.value = true;
+      }
       let token = Math.random().toString(36).substr(2);
       sessionStorage.setItem("isLoggedIn", true);
       sessionStorage.setItem("token", token);

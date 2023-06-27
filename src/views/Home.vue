@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="menubar">
-      <button class="btn" @click="isOpenModal(true)">Add Car</button>
+      <button class="btn" @click="isOpenModal(true)">
+        {{ $t("home.addBtn") }}
+      </button>
     </div>
     <GalleryCard></GalleryCard>
   </div>

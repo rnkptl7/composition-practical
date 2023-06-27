@@ -34,10 +34,7 @@
         <div class="card-details">
           <p class="text-title">{{ car.name }}</p>
           <p class="text-body">
-            {{
-              car.details?.slice(0, 70) +
-              (car.details?.length > 70 ? "..." : "")
-            }}
+            {{ descriptionTrunk(car.details) }}
           </p>
           <div class="cardBtn">
             <div>
@@ -176,6 +173,10 @@ const form = reactive({
 let editCarId = reactive({});
 
 carStore.getData();
+
+function descriptionTrunk(details) {
+  return details.slice(0, 55) + (details.length > 55 ? "..." : "");
+}
 
 const editItem = (value) => {
   carStore.editButton();

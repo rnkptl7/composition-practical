@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar">
+  <div class="navbar" id="nav">
     <router-link :to="{ name: 'Home' }">
       <div class="navbar-logo">
         <img class="logo" src="/images/logo.png" alt="apnicar logo" />
@@ -7,16 +7,49 @@
       </div>
     </router-link>
     <div class="navbar-right" v-show="!mobileView">
-      <div v-if="isLoggedIn">
-        <router-link :to="{ name: 'Home' }">Home</router-link>
-        <button class="btn" @click="logoutBtn">Logout</button>
+      <div v-if="isLoggedIn" class="mobileRightMenu">
+        <div class="languageSelect">
+          <img src="/images/translation-icon.png" alt="" />
+          <select v-model="$i18n.locale">
+            <option value="en" selected>English</option>
+            <option value="ge">German</option>
+          </select>
+        </div>
+        <router-link :to="{ name: 'Home' }" id="link">
+          {{ $t("navbar.home") }}</router-link
+        >
+        <router-link v-if="isAdmin" :to="{ name: 'Users' }">{{
+          $t("users.users")
+        }}</router-link>
+        <button class="btn" @click="logoutBtn">
+          {{ $t("navbar.logout") }}
+        </button>
       </div>
-      <div v-else>
-        <router-link :to="{ name: 'Login' }">Login</router-link>
-        <router-link :to="{ name: 'Register' }">Register</router-link>
+      <div v-else class="mobileRightMenu">
+        <div class="languageSelect">
+          <img src="/images/translation-icon.png" alt="" />
+          <select v-model="$i18n.locale">
+            <option value="en" selected>English</option>
+            <option value="ge">German</option>
+          </select>
+        </div>
+        <router-link :to="{ name: 'Login' }" id="loginBtn">{{
+          $t("navbar.login")
+        }}</router-link>
+        <router-link :to="{ name: 'Register' }">{{
+          $t("navbar.register")
+        }}</router-link>
       </div>
     </div>
-    <div v-show="mobileView">
+    <div v-show="mobileView" class="mobileRightMenu">
+      <div class="languageSelect">
+        <img src="/images/translation-icon.png" alt="" />
+
+        <select v-model="$i18n.locale">
+          <option value="en" selected>English</option>
+          <option value="ge">German</option>
+        </select>
+      </div>
       <img
         v-show="!showNav"
         class="hamburgerMenu"
@@ -50,7 +83,7 @@ const carStore = useCarStore();
 const router = useRouter();
 
 const { mobileView, showNav } = storeToRefs(carStore);
-const { isLoggedIn } = storeToRefs(userStore);
+const { isLoggedIn, isAdmin } = storeToRefs(userStore);
 
 function logoutBtn() {
   userStore.logout();
@@ -124,6 +157,34 @@ window.addEventListener("scroll", carStore.closeMobileMenu);
       font-weight: 600;
     }
   }
+
+  .mobileRightMenu {
+    display: flex;
+    align-items: center;
+
+    .languageSelect {
+      margin-right: 10px;
+      display: flex;
+
+      img {
+        width: 25px;
+      }
+
+      select {
+        cursor: pointer;
+        outline: none;
+        border-radius: 10px;
+        background-color: #334756;
+        border: none;
+        color: #fff;
+        font-size: 17px;
+
+        option {
+          font-size: 15px;
+        }
+      }
+    }
+  }
 }
 @media (max-width: 1098px) {
   .navbar {
@@ -133,10 +194,25 @@ window.addEventListener("scroll", carStore.closeMobileMenu);
 
 @media (max-width: 559px) {
   .navbar {
-    padding: 0 10px;
+    padding: 0 30px;
 
     .navbar-logo p {
-      font-size: 35px;
+      font-size: 30px;
+    }
+  }
+}
+
+@media (max-width: 381px) {
+  .navbar {
+    padding: 0 10px;
+
+    .navbar-logo {
+      .logo {
+        width: 40px;
+      }
+      p {
+        font-size: 27px;
+      }
     }
   }
 }

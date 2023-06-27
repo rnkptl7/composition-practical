@@ -1,0 +1,22 @@
+{
+    "home":{
+        "addBtn": "Auto hinzufügen"
+    },
+    "navbar":{
+        "home": "Heim",
+        "logout": "Ausloggen",
+        "login": "Anmeldung",
+        "register": "Registrieren"
+    },
+    "details":{
+        "buynow": "Kaufe jetzt",
+        "back": "Zurück"
+    },
+    "register":{
+        "registerhere": "Hier registrieren",
+        "cancel": "Stornieren"
+    },
+    "users":{
+        "users": "Benutzerin"
+    }
+}

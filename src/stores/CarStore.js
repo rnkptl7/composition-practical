@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 export const useCarStore = defineStore("carStore", {
   state: () => ({
     carsData: [],
-    loading: false,
+    loading: true,
     isError: false,
     openModal: false,
     editModal: false,

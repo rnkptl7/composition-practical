@@ -7,7 +7,7 @@
     <div v-else class="navigationBar">
       <div class="backBtn" @click="$router.push({ name: 'Home' })">
         <img src="/images/back.png" alt="Back Image" />
-        <p>Back</p>
+        <p>{{ $t("details.back") }}</p>
       </div>
     </div>
     <div v-if="!isError" class="carDetails" v-for="car in car">
@@ -20,7 +20,7 @@
           <p class="details">{{ car?.details }}</p>
         </div>
         <div class="carInfo">
-          <button class="btn">Buy Now</button>
+          <button class="btn">{{ $t("details.buynow") }}</button>
           <p>₹{{ car?.price }}</p>
         </div>
       </div>
@@ -86,14 +86,13 @@ function initData() {
 
 await carStore.getData();
 
-initData();
+await initData();
 
 watch(() => route.params.id, initData);
 </script>
 
 <style lang="scss">
 .carCard {
-  //   height: 20px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -101,7 +100,6 @@ watch(() => route.params.id, initData);
   .navigationBar {
     width: 70%;
     margin: 3rem 0 0;
-    // background: red;
 
     .backBtn {
       display: flex;
@@ -126,14 +124,15 @@ watch(() => route.params.id, initData);
   .carDetails {
     display: flex;
     background: #334756;
-    width: 900px;
+    width: 72rem;
+    height: 25rem;
     margin: 5rem 0;
     padding: 2rem;
     border-radius: 10px;
 
     .carImage {
       width: 60%;
-      height: 300px;
+      height: 100%;
       border-radius: 5px;
       overflow: hidden;
 
@@ -157,11 +156,11 @@ watch(() => route.params.id, initData);
         font-size: 18px;
       }
       .details {
-        height: 8rem;
+        height: 10rem;
       }
 
       .carInfo {
-        width: 70%;
+        width: 90%;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -193,7 +192,7 @@ watch(() => route.params.id, initData);
     text-decoration: none;
   }
 }
-@media only screen and (min-width: 630px) and (max-width: 1027px) {
+@media only screen and (min-width: 851px) and (max-width: 1207px) {
   .carCard {
     .carDetails {
       width: 80%;
@@ -201,25 +200,37 @@ watch(() => route.params.id, initData);
       .carDesc {
         padding: 1.3rem;
 
+        .details {
+          height: 12rem;
+          overflow: hidden;
+        }
+
         .carInfo {
-          width: 90%;
+          width: 100%;
         }
       }
     }
   }
 }
 
-@media (max-width: 629px) {
+@media (max-width: 850px) {
   .carCard {
     .carDetails {
       width: 80%;
+      height: auto;
       flex-direction: column;
 
       .carDesc {
-        width: 90%;
+        width: 100%;
+
+        .details {
+          height: 7rem;
+          overflow: hidden;
+        }
       }
       .carImage {
         width: 100%;
+        height: 20rem;
       }
     }
   }
@@ -228,8 +239,8 @@ watch(() => route.params.id, initData);
 @media (max-width: 500px) {
   .carCard {
     .carDetails {
-      width: 70%;
-      flex-direction: column;
+      width: 90%;
+      padding: 0.8rem;
 
       .carImage {
         width: 100%;
@@ -237,13 +248,16 @@ watch(() => route.params.id, initData);
       }
 
       .carDesc {
-        padding: 2rem 1rem;
+        padding: 1rem;
+        padding-bottom: 1.5rem;
+        width: 100%;
 
         .details {
-          height: 6rem;
+          height: 7rem;
+          overflow: hidden;
         }
         .carInfo {
-          width: 70%;
+          width: 100%;
         }
       }
     }
